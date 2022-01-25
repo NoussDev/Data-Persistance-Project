@@ -18,10 +18,15 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
+    private Text bestScoreText;
+
     
     // Start is called before the first frame update
     void Start()
     {
+        bestScoreText = GameObject.Find("BestScore").GetComponent<Text>();
+        UIManager.LoadBestScore();
+        ReloadDataBestScore(UIManager.nameBestPlayer, UIManager.scoreBestPlayer);
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -70,7 +75,17 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if(m_Points > UIManager.scoreBestPlayer)
+        {
+            UIManager.SaveBestScore(m_Points);
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    private void ReloadDataBestScore(string name, int score)
+    {
+        bestScoreText.text = "Best Score: " + score + " Name: " + name;
+    }
+
 }
